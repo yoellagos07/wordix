@@ -63,7 +63,7 @@ function palabra($palabras){
     echo "Seleccione una palabra de la colección:\n";
     // Mostrar la lista de palabras disponibles
     foreach ($palabras as $indice => $palabra) {
-        echo $indice. $palabra."\n";
+        echo $indice. $palabra . "\n";
     }
 
     // Solicitar al jugador que elija una palabra
@@ -85,12 +85,12 @@ function cargarPartidas(){
     $coleccionPartidas[0] = ["palabraWordix"=> "QUESO" , "jugador" => "majo", "intentos"=> 0, 'puntaje' => 0];
     $coleccionPartidas[1] = ["palabraWordix"=> "CASAS" , "jugador" => "rudolf", "intentos"=> 3, 'puntaje' => 14];
     $coleccionPartidas[2] = ["palabraWordix"=> "QUESO" , "jugador" => "pink2000", "intentos"=> 6, 'puntaje' => 10];
-    $coleccionPartidas[3] = ["palabraWordix"=> "RIVER" , "jugador" => "alexis03", "intentos"=> 7, 'puntaje' => 4];
-    $coleccionPartidas[4] = ["palabraWordix"=> "MUJER" , "jugador" => "milena12", "intentos"=> 8, 'puntaje' => 12];
+    $coleccionPartidas[3] = ["palabraWordix"=> "RIVER" , "jugador" => "alexis03", "intentos"=> 4, 'puntaje' => 4];
+    $coleccionPartidas[4] = ["palabraWordix"=> "MUJER" , "jugador" => "milena12", "intentos"=> 5, 'puntaje' => 12];
     $coleccionPartidas[5] = ["palabraWordix"=> "VERDE" , "jugador" => "majo", "intentos"=> 6, 'puntaje' => 10];
     $coleccionPartidas[6] = ["palabraWordix"=> "MELON" , "jugador" => "gloria3", "intentos"=> 2, 'puntaje' => 7];
     $coleccionPartidas[7] = ["palabraWordix"=> "GATOS" , "jugador" => "milena12", "intentos"=> 1, 'puntaje' => 15];
-    $coleccionPartidas[8] = ["palabraWordix"=> "PERRO" , "jugador" => "valen78", "intentos"=> 9, 'puntaje' => 13];
+    $coleccionPartidas[8] = ["palabraWordix"=> "PERRO" , "jugador" => "valen78", "intentos"=> 3, 'puntaje' => 13];
     $coleccionPartidas[9] = ["palabraWordix"=> "PISOS" , "jugador" => "lola", "intentos"=> 1, 'puntaje' => 8];
     return $coleccionPartidas;
 }
@@ -111,10 +111,13 @@ function solicitarNumero($minimo,$partidas){
     return $num;
 }
 /**
- * 
+ * funcio que recibe la coleccion de $partidas y un num que vendria hacer el indice y muestra mensajes sobre el indice ese
+ * @param array $partidas 
+ * @param int $num
  */
-function mostrarPartida($partidas,$num){
-
+    function mostrarPartida($partidas,$num){
+        //string $palabra, jugador
+        //int $intentos, $puntaje 
     $palabra = $partidas[$num-1]["palabraWordix"];
     $jugador = $partidas[$num-1]["jugador"];
     $intentos = $partidas[$num-1]["intentos"];
@@ -185,6 +188,28 @@ function mostrarPartidasOrdenadas($partidas) {
     print_r($partidas);
 }
 
+function resumenJugador($partidas,$nombre){
+//$unaPartida = ["palabraWordix"=> "QUESO" , "jugador" => "majo", "intentos"=> 0, 'puntaje' => 0];
+
+    $contPartidas=0;
+    $contVictorias=0;
+    $contPuntaje=0;
+    $contInt1=0;
+    foreach ($partidas as $unaPartida) {
+        if ($unaPartida['jugador'] == $nombre){
+            $contPartidas=$contPartidas+1;
+            if($unaPartida['puntaje'] > 0){
+                $contVictorias=$contVictorias+1;
+            }
+            if($unaPartida['puntaje'] >=0){
+                $contPuntaje=$contPuntaje+$unaPartida['puntaje'];
+            }
+            if($unaPartida['intentos']== 1){
+            $contInt1=$contInt1+1;
+            }
+        }
+    }
+}
 
 /**
  * Una función que le pida al usuario ingresar una palabra de 5 letras, y retorne la palabra.
@@ -269,6 +294,7 @@ do {
             $llamaNombreJugador= solicitarJugador();
             $llamaPalabra= palabra($coleccionPalabras); 
             $partida = jugarWordix($llamaPalabra, $llamaNombreJugador);
+            $llamaPartidas[count($llamaPartidas)] = $partida;
             break;
 
         case 2: 
@@ -277,6 +303,7 @@ do {
             $llamaNombreJugador= solicitarJugador();
             $palabraAleatoria =  $coleccionPalabras[array_rand($coleccionPalabras)];
             $partida = jugarWordix($palabraAleatoria,$llamaNombreJugador);  
+            $llamaPartidas[count($llamaPartidas)] = $partida;
             break; 
 
         case 3:
@@ -295,6 +322,7 @@ do {
             }
             break;
         case 5:
+
             break;
         case 6:
             // Mostrar las partidas ordenadas por nombre del jugador y por palabra
