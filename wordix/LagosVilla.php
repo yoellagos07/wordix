@@ -287,6 +287,7 @@ do {
             $llamaNombreJugador= solicitarJugador();
             $llamaPalabra= ingresarPalabra();
             $partida = jugarWordix($llamaPalabra,$llamaNombreJugador);
+            
             break;
 
         case 2: 
