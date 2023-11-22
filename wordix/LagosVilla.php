@@ -88,7 +88,7 @@ function palabra($palabras, $minimo) {
 function cargarPartidas(){
     $coleccionPartidas=[];
     $coleccionPartidas[0] = ["palabraWordix"=> "QUESO" , "jugador" => "majo", "intentos"=> 0, 'puntaje' => 0];
-    $coleccionPartidas[1] = ["palabraWordix"=> "CASAS" , "jugador" => "rudolf", "intentos"=> 3, 'puntaje' => 14];
+    $coleccionPartidas[1] = ["palabraWordix"=> "CASAS" , "jugador" => "rudolf", "intentos"=> 0, 'puntaje' => 0];
     $coleccionPartidas[2] = ["palabraWordix"=> "QUESO" , "jugador" => "pink2000", "intentos"=> 6, 'puntaje' => 10];
     $coleccionPartidas[3] = ["palabraWordix"=> "RIVER" , "jugador" => "alexis03", "intentos"=> 4, 'puntaje' => 4];
     $coleccionPartidas[4] = ["palabraWordix"=> "MUJER" , "jugador" => "milena12", "intentos"=> 5, 'puntaje' => 12];
@@ -142,13 +142,14 @@ function solicitarNumero($minimo,$partidas){
  * funcion recibe de parametro 
  */
 function indicePrimeraPartidaGanada($partidas, $jugadorBuscado) {
+    $indiceEcontrado= -1;
     foreach ($partidas as $indice => $partida) {
         if ($partida['jugador'] == $jugadorBuscado && $partida['puntaje'] > 0) {
-            return $indice; // Se encontró la primera partida ganada
+            $indiceEcontrado= $indice; // Se encontró la primera partida ganada
         }
     }
 
-    return -1; // El jugador no ganó ninguna partida
+    return $indiceEcontrado; // El jugador no ganó ninguna partida
 }
 /**
  * 
@@ -166,7 +167,7 @@ function primeraPartidaGanada ($partidas,$indice){
     echo "************************************\n";
 }
 
-
+/*
 function compararPartidas($partida1, $partida2) {
     //strcmp para comparar las cadenas en la clave 'jugador' de las dos partidas.
     $comparacionPorJugador = strcmp($partida1['jugador'], $partida2['jugador']);
@@ -179,6 +180,15 @@ function compararPartidas($partida1, $partida2) {
     //Después, si las cadenas de los jugadores son iguales,
     // se procede a comparar las cadenas en la clave 'palabraWordix'
     return strcmp($partida1['palabraWordix'], $partida2['palabraWordix']);
+}
+*/
+function compararPartidas($partida1, $partida2) {
+    // strcmp para comparar las cadenas en la clave 'jugador' de las dos partidas.
+    $comparacionPorJugador = strcmp($partida1['jugador'], $partida2['jugador']);
+
+    // Si las cadenas de los jugadores son iguales, se procede a comparar las cadenas en la clave 'palabraWordix'
+    // Si $comparacionPorJugador es igual a 0, se retorna la comparación por palabraWordix.
+    return ($comparacionPorJugador === 0) ? strcmp($partida1['palabraWordix'], $partida2['palabraWordix']) : $comparacionPorJugador;
 }
 /**
  * funcion recibe como parametro la coleccion de partidas y las devuelve ordenadas
@@ -396,7 +406,7 @@ do {
                 $llamaPrimeraPartidaGanada=primeraPartidaGanada($llamaPartidas,$llamaIndice);
                 echo $llamaPrimeraPartidaGanada;
             } else {
-                echo "El jugador $nombre no ganó ninguna partida";
+                echo "El jugador ". $llamaNombreJugador ." no ganó ninguna partida";
             }
             break;
         case 5:
