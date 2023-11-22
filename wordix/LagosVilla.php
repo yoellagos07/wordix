@@ -57,7 +57,8 @@ function palabrasAleatorias()
         "VERDE", "MELON", "YUYOS", "PIANO", "PISOS",
         "RIVER","AUTOS","RAMON","MANOS","PERROS",
     ];
-
+// La función array_rand devuelve un índice aleatorio de un array. 
+//En este caso, se utiliza para obtener un índice aleatorio del array $coleccionPalabras.
     return $coleccionPalabras[array_rand($coleccionPalabras)];
 }
 /**
@@ -208,6 +209,7 @@ function mostrarPartidasOrdenadas($partidas) {
  * Una función que le pida al usuario ingresar una palabra de 5 letras, y retorne la palabra.
  * @return $palabra
  */
+
 function ingresarPalabra (){
     $palabra = '';
     do {
@@ -284,9 +286,7 @@ do {
         case 1: 
             $llamaNombreJugador= solicitarJugador();
             $llamaPalabra= ingresarPalabra();
-            $partida = jugarWordix($llamaPalabra,$llamaNombreJugador );
-            
-
+            $partida = jugarWordix($llamaPalabra,$llamaNombreJugador);
             break;
 
         case 2: 
