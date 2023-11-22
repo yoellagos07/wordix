@@ -193,7 +193,7 @@ function resumenJugador($partidas,$nombre){
 
     $contPartidas=0;
     $contVictorias=0;
-    $contPuntaje=0;
+    $sumaPuntaje=0;
     $contInt1=0;
     //hola
     foreach ($partidas as $unaPartida) {
@@ -201,9 +201,7 @@ function resumenJugador($partidas,$nombre){
             $contPartidas=$contPartidas+1;
             if($unaPartida['puntaje'] > 0){
                 $contVictorias=$contVictorias+1;
-            }
-            if($unaPartida['puntaje'] >=0){
-                $contPuntaje=$contPuntaje+$unaPartida['puntaje'];
+                $sumaPuntaje=$sumaPuntaje+$unaPartida['puntaje'];
             }
             if($unaPartida['intentos']== 1){
             $contInt1=$contInt1+1;
