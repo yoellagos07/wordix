@@ -16,9 +16,11 @@ include_once("wordix.php");
 /**************************************/
 
 /**
+ * funcion que crea un menu 
  * @return int $opcion
  */
 function mostrarMenu(){
+    //INT $opcion
     echo "************************\n";
     echo "1. Jugar al wordix con una palabra elegida\n";
     echo "2. Jugar al wordix con una palabra aleatoria \n";
@@ -35,34 +37,49 @@ function mostrarMenu(){
 }
 
 /**
- * Obtiene una colección de palabras
+ * Obtiene una colección de palabras  
+ * retorna una coleccion de palabras 
  * @return array
+ * 
  */
 function cargarColeccionPalabras()
 {
+    //
     $coleccionPalabras = [
         "MUJER", "QUESO", "FUEGO", "CASAS", "RASGO",
         "GATOS", "GOTAS", "HUEVO", "TINTO", "NAVES",
         "VERDE", "MELON", "YUYOS", "PIANO", "PISOS",
-        "RIVER","AUTOS","RAMON","MANOS","PERROS",
+        "RIVER","AUTOS","RAMON","MANOS","PERRO",
     ];
 
     return ($coleccionPalabras);
 }
-function palabrasAleatorias()
-{
-    $coleccionPalabras = [
-        "MUJER", "QUESO", "FUEGO", "CASAS", "RASGO",
-        "GATOS", "GOTAS", "HUEVO", "TINTO", "NAVES",
-        "VERDE", "MELON", "YUYOS", "PIANO", "PISOS",
-        "RIVER","AUTOS","RAMON","MANOS","PERROS",
-    ];
-// La función array_rand devuelve un índice aleatorio de un array. 
-//En este caso, se utiliza para obtener un índice aleatorio del array $coleccionPalabras.
-    return $coleccionPalabras[array_rand($coleccionPalabras)];
-}
 /**
- * 
+ * funcion que recibe como parametro una coleccion de palabras y retorna 
+ * @param array $palabras
+ */
+function palabra($palabras){
+    $n=count($palabras);
+    echo "Seleccione una palabra de la colección:\n";
+
+    // Mostrar la lista de palabras disponibles
+    foreach ($palabras as $indice => $palabra) {
+        echo $indice. $palabra."\n";
+    }
+
+    // Solicitar al jugador que elija una palabra
+    echo "Ingrese el número de la palabra: ";
+    $indiceSeleccionado = trim(fgets(STDIN));
+    while($indiceSeleccionado<0 || $indiceSeleccionado>$n){
+        echo"numero invalido ingrese otro\n";
+        $indiceSeleccionado=trim(fgets(STDIN));
+    }
+    return strtoupper($palabras[$indiceSeleccionado]);
+}
+
+
+/**
+ * funcion si parametros de entradas que crea una coleccion de partidas indexeada asociativa y la retorna.
  */
 function cargarPartidas(){
     $coleccionPartidas=[];
@@ -79,7 +96,10 @@ function cargarPartidas(){
     return $coleccionPartidas;
 }
 /**
- * 
+ * funcion que recibe un valor minimo que es 1 y una coleccion de partidas y retorna un numero en el rango minimo y maximo
+ * @param array $partidas
+ * @param int $minimo
+ * @return int $num
  */
 
 function solicitarNumero($minimo,$partidas){
@@ -117,7 +137,7 @@ function mostrarPartida($partidas,$num){
  */
 function indicePrimeraPartidaGanada($partidas, $jugadorBuscado) {
     foreach ($partidas as $indice => $partida) {
-        if ($partida['jugador'] === $jugadorBuscado && $partida['puntaje'] > 0) {
+        if ($partida['jugador'] == $jugadorBuscado && $partida['puntaje'] > 0) {
             return $indice; // Se encontró la primera partida ganada
         }
     }
@@ -139,55 +159,7 @@ function primeraPartidaGanada ($partidas,$indice){
     echo "intentos : adivino la palabra en ". $intentos." intentos\n";
     echo "************************************\n";
 }
-/**
- * funcion que recibe como parametro la coleccion de parrtidas y el nombre de un jugador
- * y retorna el resumen del jugador
- * @param array $partidas
- * @param string $nombre
- */
-function obtenerResumenJugador($partidas, $nombreJugador) {
-    foreach ($partidas as $partida) {
-        if ($partida['jugador'] == $nombreJugador) {
-            return $partida;
-        }
-    }
 
-    // Si no se encuentra al jugador, devolver un valor nulo o manejarlo de acuerdo a tus necesidades
-    return null;
-}
-
-function mostrarResumenJugador($resumenJugador) {
-    echo "Jugador: {$resumenJugador['jugador']}\n";
-
-    // Verificar si la clave 'partidas' existe antes de acceder
-    echo "Partidas: " . (isset($resumenJugador['partidas']) ? $resumenJugador['partidas'] : 0) . "\n";
-
-    // Verificar si la clave 'puntaje' existe antes de acceder
-    echo "Puntaje Total: " . (isset($resumenJugador['puntaje']) ? $resumenJugador['puntaje'] : 0) . "\n";
-
-    // Verificar si la clave 'victorias' existe antes de acceder
-    echo "Victorias: " . (isset($resumenJugador['victorias']) ? $resumenJugador['victorias'] : 0) . "\n";
-
-    // Calcular el porcentaje de victorias
-    if (isset($resumenJugador['partidas']) && $resumenJugador['partidas'] > 0) {
-        $porcentajeVictorias = ($resumenJugador['victorias'] / $resumenJugador['partidas']) * 100;
-        echo "Porcentaje Victorias: {$porcentajeVictorias}%\n";
-    } else {
-        echo "Porcentaje Victorias: 0%\n";
-    }
-
-    // Mostrar intentos adivinados
-    echo "Adivinadas:\n";
-    for ($i = 1; $i <= 5; $i++) {
-        $intentos = "Intento $i: ";
-        if (isset($resumenJugador["intento$i"])) {
-            $intentos .= $resumenJugador["intento$i"];
-        } else {
-            $intentos .= 'No intentado';
-        }
-        echo "$intentos\n";
-    }
-}
 
 function compararPartidas($partida1, $partida2) {
     $comparacionPorJugador = strcmp($partida1['jugador'], $partida2['jugador']);
@@ -251,6 +223,7 @@ function solicitarJugador (){
     return strtolower($nombre);
 }
 
+
 /* ****COMPLETAR***** */
 
 
@@ -285,16 +258,18 @@ do {
     switch ($opcion) {
         case 1: 
             $llamaNombreJugador= solicitarJugador();
-            $llamaPalabra= ingresarPalabra();
-            $partida = jugarWordix($llamaPalabra,$llamaNombreJugador);
-            
+            $llamaPalabra= palabra($coleccionPalabras); 
+            $partida = jugarWordix($llamaPalabra, $llamaNombreJugador);
             break;
 
         case 2: 
+            // La función array_rand devuelve un índice aleatorio de un array. 
+            //En este caso, se utiliza para obtener un índice aleatorio del array $coleccionPalabras.
             $llamaNombreJugador= solicitarJugador();
-            $palabraAleatoria = palabrasAleatorias();
+            $palabraAleatoria =  $coleccionPalabras[array_rand($coleccionPalabras)];
             $partida = jugarWordix($palabraAleatoria,$llamaNombreJugador);  
             break; 
+
         case 3:
             $llamaSolicitarNumero=solicitarNumero($min,$llamaPartidas);
             $llama=mostrarPartida($llamaPartidas,$llamaSolicitarNumero);
@@ -311,15 +286,6 @@ do {
             }
             break;
         case 5:
-            echo"ingrese el nombre del jugador\n";
-            $nombre=trim(fgets(STDIN));
-            $resumenJugador = obtenerResumenJugador($llamaPartidas, $nombre);
-
-            if ($resumenJugador !== null) {
-                    mostrarResumenJugador($resumenJugador);
-            } else {
-                    echo "No se encontró al jugador '$nombre' en la colección de partidas.\n";
-            }
             break;
         case 6:
             // Mostrar las partidas ordenadas por nombre del jugador y por palabra
