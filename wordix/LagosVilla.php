@@ -54,28 +54,33 @@ function cargarColeccionPalabras()
 
     return ($coleccionPalabras);
 }
-/**
- * funcion que recibe como parametro una coleccion de palabras y retorna palabra con el indice
- * @param array $palabras
- */
-function palabra($palabras){
-    $n=count($palabras);
-    echo "Seleccione una palabra de la colección:\n";
-    // Mostrar la lista de palabras disponibles
-    foreach ($palabras as $indice => $palabra) {
-        echo $indice. $palabra . "\n";
-    }
 
+// Función para verificar si una palabra ya se jugó
+function yaSeJugo($partidas, $palabraJugar, $nombre) {
+    $palabraUsada=false;
+    foreach ($partidas as $unaPartida) {
+        if ($unaPartida['palabraWordix'] == $palabraJugar) {
+            if($unaPartida['jugador'] == $nombre){
+            $palabraUsada= true;
+        break;
+            }
+        }
+    }
+    return $palabraUsada;
+}
+
+// Función para obtener una palabra no repetida
+function palabra($palabras, $minimo) {
+    $maximo=count($palabras);
     // Solicitar al jugador que elija una palabra
-    echo "Ingrese el número de la palabra: ";
-    $indiceSeleccionado = trim(fgets(STDIN));
-    while($indiceSeleccionado<0 || $indiceSeleccionado>$n){
+    echo"ingrese un numero entre " .$minimo. " y ". $maximo ." para jugar con esa palabra\n";
+    $indiceSeleccionado=trim(fgets(STDIN));
+    while($indiceSeleccionado<$minimo || $indiceSeleccionado>$maximo){
         echo"numero invalido ingrese otro\n";
         $indiceSeleccionado=trim(fgets(STDIN));
     }
-    return strtoupper($palabras[$indiceSeleccionado]);//devuelve la palabra en mayuscula
+    return strtoupper($palabras[$indiceSeleccionado-1]);//devuelve la palabra en mayuscula
 }
-
 
 /**
  * funcion si parametros de entradas que crea una coleccion de partidas indexeada asociativa y la retorna.
@@ -313,6 +318,7 @@ function existePalabra ($palabras, $palabraN){
     return $encontrada;
 }
 
+
 function solicitarJugador (){
     echo "ingrese el nombre del jugador\n";
     $nombre = trim(fgets(STDIN));
@@ -354,9 +360,14 @@ do {
     switch ($opcion) {
         case 1: 
             $llamaNombreJugador= solicitarJugador();
-            $llamaPalabra= palabra($coleccionPalabras); 
-            $partida = jugarWordix($llamaPalabra, $llamaNombreJugador);
-            $llamaPartidas[count($llamaPartidas)] = $partida;
+            $llamaPalabra = palabra($coleccionPalabras, $min);
+            $llamaYaSeJugo=yaSeJugo($llamaPartidas, $llamaPalabra, $llamaNombreJugador);
+            if ($llamaYaSeJugo == true) {
+                echo "La palabra ya se jugó, elige otra.\n";
+            } else {
+                $partida = jugarWordix($llamaPalabra, $llamaNombreJugador);
+                $llamaPartidas[count($llamaPartidas)] = $partida;
+            }
             break;
 
         case 2: 
@@ -364,9 +375,14 @@ do {
             //En este caso, se utiliza para obtener un índice aleatorio del array $coleccionPalabras.
             $llamaNombreJugador= solicitarJugador();
             $palabraAleatoria =  $coleccionPalabras[array_rand($coleccionPalabras)];
-            $partida = jugarWordix($palabraAleatoria,$llamaNombreJugador);  
-            $llamaPartidas[count($llamaPartidas)] = $partida;
-            break; 
+            $llamaYaSeJugo=yaSeJugo($llamaPartidas, $palabraAleatoria, $llamaNombreJugador);
+            if ($llamaYaSeJugo == true) {
+                echo "La palabra ya se jugó.\n";
+            } else {
+                $partida = jugarWordix($palabraAleatoria, $llamaNombreJugador);
+                $llamaPartidas[count($llamaPartidas)] = $partida;
+            }
+            break;
 
         case 3:
             $llamaSolicitarNumero=solicitarNumero($min,$llamaPartidas);
