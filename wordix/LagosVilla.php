@@ -55,13 +55,12 @@ function cargarColeccionPalabras()
     return ($coleccionPalabras);
 }
 /**
- * funcion que recibe como parametro una coleccion de palabras y retorna 
+ * funcion que recibe como parametro una coleccion de palabras y retorna palabra con el indice
  * @param array $palabras
  */
 function palabra($palabras){
     $n=count($palabras);
     echo "Seleccione una palabra de la colección:\n";
-
     // Mostrar la lista de palabras disponibles
     foreach ($palabras as $indice => $palabra) {
         echo $indice. $palabra."\n";
@@ -74,7 +73,7 @@ function palabra($palabras){
         echo"numero invalido ingrese otro\n";
         $indiceSeleccionado=trim(fgets(STDIN));
     }
-    return strtoupper($palabras[$indiceSeleccionado]);
+    return strtoupper($palabras[$indiceSeleccionado]);//devuelve la palabra en mayuscula
 }
 
 
@@ -101,7 +100,6 @@ function cargarPartidas(){
  * @param int $minimo
  * @return int $num
  */
-
 function solicitarNumero($minimo,$partidas){
     $maximo=count($partidas);
     echo"ingrese un numero entre " .$minimo. " y ". $maximo ."\n";
@@ -133,7 +131,7 @@ function mostrarPartida($partidas,$num){
     echo "************************************\n";
 }
 /**
- * 
+ * funcion recibe de parametro 
  */
 function indicePrimeraPartidaGanada($partidas, $jugadorBuscado) {
     foreach ($partidas as $indice => $partida) {
@@ -162,17 +160,28 @@ function primeraPartidaGanada ($partidas,$indice){
 
 
 function compararPartidas($partida1, $partida2) {
+    //strcmp para comparar las cadenas en la clave 'jugador' de las dos partidas.
     $comparacionPorJugador = strcmp($partida1['jugador'], $partida2['jugador']);
-
+    //Si $comparacionPorJugador no es igual a 0, significa que las cadenas son diferentes,
+    // y en ese caso, la función retorna ese valor.
+    //Esto significa que el arreglo $partidas se ordenará primero por el nombre del jugador.
     if ($comparacionPorJugador !== 0) {
         return $comparacionPorJugador;
     }
-
+    //Después, si las cadenas de los jugadores son iguales,
+    // se procede a comparar las cadenas en la clave 'palabraWordix'
     return strcmp($partida1['palabraWordix'], $partida2['palabraWordix']);
 }
-
+/**
+ * funcion recibe como parametro la coleccion de partidas y las devuelve ordenadas
+ * @param array $partidas
+ */
 function mostrarPartidasOrdenadas($partidas) {
+    //Esto ordenará el array $partidas de acuerdo con la lógica 
+    //definida en la función compararPartidas, 
+    //es decir, primero por jugador y luego por palabra Wordix en caso de empate. 
     uasort($partidas, 'compararPartidas');
+    //Finalmente, se imprime el array ordenado con print_r($partidas).
     print_r($partidas);
 }
 
@@ -220,7 +229,7 @@ function existePalabra ($palabras, $palabraN){
 function solicitarJugador (){
     echo "ingrese el nombre del jugador\n";
     $nombre = trim(fgets(STDIN));
-    return strtolower($nombre);
+    return strtolower($nombre);//pasa el nombre a minuscula
 }
 
 
@@ -277,9 +286,9 @@ do {
             break;
         case 4:
             $llamaNombreJugador= solicitarJugador();
-            $indice=indicePrimeraPartidaGanada($llamaPartidas,$llamaNombreJugador);
-            if ($indice !== -1) {
-                $llamaPrimeraPartidaGanada=primeraPartidaGanada($llamaPartidas,$indice);
+            $llamaIndice=indicePrimeraPartidaGanada($llamaPartidas,$llamaNombreJugador);
+            if ($llamaIndice !== -1) {
+                $llamaPrimeraPartidaGanada=primeraPartidaGanada($llamaPartidas,$llamaIndice);
                 echo $llamaPrimeraPartidaGanada;
             } else {
                 echo "El jugador $nombre no ganó ninguna partida";

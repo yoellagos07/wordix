@@ -328,7 +328,10 @@ function esIntentoGanado($estructuraPalabraIntento)
 }
 
 /**
- * ****COMPLETAR***** documentación de la intefaz
+ * funcion recibe como parametro la palabra y cuantos intentos hizo en base a eso retorna el puntaje
+ * @param string $palabraAdivinada
+ * @param int $intentosRalizados
+ * @return int
  */
 function obtenerPuntajeWordix($palabraAdivinada, $intentosRealizados)  /* ****COMPLETAR***** parámetros formales necesarios */
 {
@@ -357,7 +360,12 @@ function obtenerPuntajeWordix($palabraAdivinada, $intentosRealizados)  /* ****CO
 
     // Calcula el puntaje por letras
     $palabraAdivinada = str_split(strtolower($palabraAdivinada));
+    //La palabra adivinada se convierte a minúsculas y se divide en un array de letras usando str_split
+    // Luego, se recorre este array para calcular el puntaje total basado en los puntajes asignados a cada letra.
     foreach ($palabraAdivinada as $letra) {
+        //Aca se incrementa el puntaje según el valor asignado a cada letra en el array $puntajesLetras. 
+        //Si la letra no está en el array, se suma 0 al puntaje.
+        //Se utiliza isset para verificar si la letra está presente en $puntajesLetras
         $puntaje += isset($puntajesLetras[$letra]) ? $puntajesLetras[$letra] : 0;
     }
 
