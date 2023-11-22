@@ -195,6 +195,7 @@ function resumenJugador($partidas,$nombre){
     $contVictorias=0;
     $contPuntaje=0;
     $contInt1=0;
+    //hola
     foreach ($partidas as $unaPartida) {
         if ($unaPartida['jugador'] == $nombre){
             $contPartidas=$contPartidas+1;
