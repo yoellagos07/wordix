@@ -366,7 +366,7 @@ function obtenerPuntajeWordix($palabraAdivinada, $intentosRealizados)  /* ****CO
         //Aca se incrementa el puntaje según el valor asignado a cada letra en el array $puntajesLetras. 
         //Si la letra no está en el array, se suma 0 al puntaje.
         //Se utiliza isset para verificar si la letra está presente en $puntajesLetras
-        $puntaje += isset($puntajesLetras[$letra]) ? $puntajesLetras[$letra] : 0;
+        $puntaje = $puntaje + isset($puntajesLetras[$letra]) ? $puntajesLetras[$letra] : 0;
     }
 
     return $puntaje;
